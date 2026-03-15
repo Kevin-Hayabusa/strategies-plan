@@ -11,7 +11,7 @@
 | # | Strategy | Type | Instrument | Frequency | Source | Status |
 |---|----------|------|------------|-----------|--------|--------|
 | 1 | [Dispersion Momentum](#1-dispersion-momentum) | Trend-following | CSI 300/500/1000 ETF | Weekly | Guosen Securities, 2017 | Ready |
-| 2 | [Constituent Consistency](#2-constituent-consistency) | Trend-following | CSI 300 Futures (IF) | Intraday | GF Securities, 2016 | Ready |
+| 2 | [Constituent Consistency (PCA-Based)](#2-constituent-consistency-pca-based) | Trend-following | CSI 300 Futures (IF) | Intraday | GF Securities, 2016 | Ready |
 | 3 | [Index Money Flow](#3-index-money-flow) | Cross-country L/S | HSI/CSI/KOSPI/NKY/TAIEX Futures | Weekly | Changjiang Securities, 2020 | Ready |
 | 4 | [Futures Roll](#4-futures-roll) | Calendar Spread | IF / IC (CSI 300 / 500 Futures) | Monthly | CITIC Futures | Ready |
 
@@ -42,11 +42,11 @@
 
 ---
 
-### 2. Constituent Consistency
+### 2. Constituent Consistency (PCA-Based)
 
-**Folder**: [consistency/](consistency/)
-**Plan**: [consistency/backtest_plan.md](consistency/backtest_plan.md)
-**Source**: [consistency/consistency.pdf](consistency/consistency.pdf)
+**Folder**: [index-stocks-pca/](index-stocks-pca/)
+**Plan**: [index-stocks-pca/backtest_plan.md](index-stocks-pca/backtest_plan.md)
+**Source**: [index-stocks-pca/consistency.pdf](index-stocks-pca/consistency.pdf)
 
 **Core Idea**: Uses PCA on intraday constituent prices to measure how "in unison" stocks are moving. When consistency (first PC variance explained ratio R) is high, the market has a collective force likely to produce a trend — trade the direction of the first T minutes. When R is low, skip the day.
 
