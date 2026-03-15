@@ -12,6 +12,7 @@
 |---|----------|------|------------|-----------|--------|--------|
 | 1 | [Dispersion Momentum](#1-dispersion-momentum) | Trend-following | CSI 300/500/1000 ETF | Weekly | Guosen Securities, 2017 | Ready |
 | 2 | [Constituent Consistency](#2-constituent-consistency) | Trend-following | CSI 300 Futures (IF) | Intraday | GF Securities, 2016 | Ready |
+| 3 | [Index Money Flow](#3-index-money-flow) | Cross-country L/S | HSI/CSI/KOSPI/NKY/TAIEX Futures | Weekly | Changjiang Securities, 2020 | Ready |
 
 ---
 
@@ -91,6 +92,40 @@ PDF / Word idea
 2. Add source material: `strategy-name/source.pdf` (or `.docx`)
 3. Write the plan: `strategy-name/backtest_plan.md`
 4. Add a row to the [Strategy Index](#strategy-index) above
+
+---
+
+### 3. Index Money Flow
+
+**Folder**: [index-money-flow/](index-money-flow/)
+**Plan**: [index-money-flow/backtest_plan.md](index-money-flow/backtest_plan.md)
+**Source**: [index-money-flow/changjiang_hf_factor_7.pdf](index-money-flow/changjiang_hf_factor_7.pdf)
+
+**Core Idea**: Extends the A-share 博弈因子 (Game Factor / Active Trading Ratio) from stock selection
+to a **cross-country index long/short strategy**. For each APAC country index, constituent stocks'
+active buy ratios are aggregated (cap-weighted) to produce an index-level 博弈因子. Countries with
+high aggregate active buying are longed; countries with dominant active selling are shorted.
+
+| Parameter | Value |
+|-----------|-------|
+| Universe | HSI, CSI 300, KOSPI 200, NKY, TAIEX |
+| Factor | Index-level active buy ratio = Σ(w_i × Stock_博弈因子_i) |
+| Distribution | Confidence Normal (markets w/ price limits) / Standardized Normal (HK, Japan) |
+| Signal | 4-week rolling mean → cross-sectional z-score |
+| Position | Long top-2, short bottom-2 countries |
+| Rebalance | Weekly (Friday signal, Monday execution) |
+| Execution | Index futures (HI1, IFc1, KM1, NK1, TW1) |
+| Data | 30-min constituent bars via Bloomberg |
+
+**Novel vs. original paper**: Original uses factor for intra-China stock selection.
+This plan aggregates to index level and uses the signal for cross-country allocation — a
+pure country rotation strategy with no individual stock positions.
+
+**Interaction with other strategies**:
+- **Dispersion factor** (Strategy #1): can be combined — dispersion controls weekly positioning,
+  game factor provides cross-country tilt
+- **Consistency factor** (Strategy #2): consistency measures intraday collective movement;
+  game factor measures buy/sell imbalance — complementary signals
 
 ---
 
