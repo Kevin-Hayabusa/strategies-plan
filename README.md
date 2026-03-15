@@ -13,6 +13,7 @@
 | 1 | [Dispersion Momentum](#1-dispersion-momentum) | Trend-following | CSI 300/500/1000 ETF | Weekly | Guosen Securities, 2017 | Ready |
 | 2 | [Constituent Consistency](#2-constituent-consistency) | Trend-following | CSI 300 Futures (IF) | Intraday | GF Securities, 2016 | Ready |
 | 3 | [Index Money Flow](#3-index-money-flow) | Cross-country L/S | HSI/CSI/KOSPI/NKY/TAIEX Futures | Weekly | Changjiang Securities, 2020 | Ready |
+| 4 | [Futures Roll](#4-futures-roll) | Calendar Spread | IF / IC (CSI 300 / 500 Futures) | Monthly | CITIC Futures | Ready |
 
 ---
 
@@ -126,6 +127,35 @@ pure country rotation strategy with no individual stock positions.
   game factor provides cross-country tilt
 - **Consistency factor** (Strategy #2): consistency measures intraday collective movement;
   game factor measures buy/sell imbalance — complementary signals
+
+---
+
+### 4. Futures Roll
+
+**Folder**: [futures-roll/](futures-roll/)
+**Plan**: [futures-roll/backtest_plan.md](futures-roll/backtest_plan.md)
+**Source**: [futures-roll/citic_futures_basis.pdf](futures-roll/citic_futures_basis.pdf)
+
+**Core Idea**: At T-10 days before front-month expiry, the annualized basis (年化折溢价率) reveals
+which side of the market is forced to roll. Deep discount → shorts roll (buy near/sell far) →
+spread widens → long the calendar spread. Deep premium → longs roll (sell near/buy far) →
+spread converges → short the calendar spread. Exit at T-2.
+
+| Parameter | Value |
+|-----------|-------|
+| Signal | Annualized basis at T-10 vs rolling 500-day 1/3 and 2/3 quantiles |
+| Basis formula | `(futures − spot + dividends) / days_to_expiry × 365` |
+| Entry | T-10 trading days before front-month expiry |
+| Exit | T-2 trading days before front-month expiry (~8-day hold) |
+| Instruments | IF00/IF02 (CSI 300), IC00/IC02 (CSI 500) |
+| Data | Daily futures + index close + dividend yield |
+
+**Expected Performance** (from source paper):
+- IF win rate: 65.71%, annualized return: ~0.74%
+- IC win rate: 75.86%, annualized return: ~1.37%
+
+**Special consideration**: IC futures are affected by **snowball structured products** (雪球期权)
+delta hedging — monitor outstanding notional and reduce IC position during high-risk periods.
 
 ---
 
